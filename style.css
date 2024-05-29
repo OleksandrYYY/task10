@@ -3,4 +3,13 @@
     justify-content: center;
     align-items: center;
     height: 500px;
+    background-color: #E6E6FA;
+}
+
+.wrapper.dark {
+    background-color: #000000;
+}
+
+.text {
+    color: #00FF00;
 }

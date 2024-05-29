@@ -1,30 +1,29 @@
 "use strict";
 
 const elemButton = document.querySelector("#element");
-const wrap = document.querySelector(".wrapper");
+const wrapperElem = document.querySelector(".wrapper");
 
-const newElem = document.createElement("p");
-newElem.classList.add("text");
-newElem.style.color = "#00FF00";
+const dataDayNow = document.createElement("p");
+dataDayNow.classList.add("text");
 
-if (localStorage.getItem("light") === null) {
-  localStorage.setItem("light", "true");
+if (localStorage.getItem("theme") === null) {
+  localStorage.setItem("theme", "light");
 }
 
-let light = localStorage.getItem("light") === "true";
-const getInfo = localStorage.getItem("info");
+let theme = localStorage.getItem("theme");
+const getDataDay = localStorage.getItem("last visit");
 
-if (light) {
+if (theme === "light") {
   elemButton.textContent = "Turn off";
-  wrap.style.backgroundColor = "#E6E6FA";
+  wrapperElem.classList.remove("dark");
 } else {
   elemButton.textContent = "Turn on";
-  wrap.style.backgroundColor = "#000000";
+  wrapperElem.classList.add("dark");
 }
 
-if (getInfo) {
-  newElem.textContent = getInfo;
-  elemButton.after(newElem);
+if (getDataDay) {
+  dataDayNow.textContent = getDataDay;
+  elemButton.after(dataDayNow);
 }
 
 const data = {
@@ -38,31 +37,32 @@ const data = {
 };
 
 elemButton.addEventListener("click", function () {
-  const nowDate = new Date();
-  const changedDate = nowDate
-    .toLocaleString("uk-UA", data)
-    .replace(",", "")
-    .replace(".", "-")
-    .replace(".", "-");
-  if (light) {
+  const dateNow = new Date();
+  const changedDate = dateNow.toLocaleString("uk-UA", data)
+  .replace(",", "")
+  .replace(".", "-")
+  .replace(".", "-");
+  
+  if (theme === "light") {
     elemButton.textContent = "Turn on";
-    wrap.style.backgroundColor = "#000000";
-    newElem.textContent = `Last turn off: ${changedDate}`;
-    localStorage.setItem("info", `Last turn off: ${changedDate}`);
+    dataDayNow.textContent = `Last turn off: ${changedDate}`;
+    localStorage.setItem("last visit", `Last turn off: ${changedDate}`);
   } else {
     elemButton.textContent = "Turn off";
-    wrap.style.backgroundColor = "#E6E6FA";
-    newElem.textContent = `Last turn on: ${changedDate}`;
-    localStorage.setItem("info", `Last turn on: ${changedDate}`);
+    dataDayNow.textContent = `Last turn on: ${changedDate}`;
+    localStorage.setItem("last visit", `Last turn on: ${changedDate}`);
   }
 
-  light = !light;
-  if (!newElem.parentNode) {
-    elemButton.after(newElem);
+  wrapperElem.classList.toggle("dark");
+
+  theme = (theme === "light") ? "dark" : "light";
+
+  if (!dataDayNow.parentNode) {
+    elemButton.after(dataDayNow);
   }
 
-  localStorage.setItem("light", light);
+  localStorage.setItem("theme", theme);
 });
 
-console.log("Info:", getInfo);
-console.log("Status:", light);
+console.log("Last visit:", getDataDay);
+console.log("Theme:", theme);
